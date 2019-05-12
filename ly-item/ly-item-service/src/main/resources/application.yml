@@ -1,0 +1,35 @@
+server:
+  port: 8083
+spring:
+  application:
+    name: item-service
+  datasource:
+    url: jdbc:mysql://localhost:3306/heima
+    username: root
+    password: 123456
+  cloud:
+    refresh:
+      refreshable: none
+  rabbitmq:
+       host: 192.168.33.140
+       username: leyou
+       password: 123
+       virtual-host: /leyou
+       template:
+         retry:  #重试机制
+           enabled: true
+           initial-interval: 10000ms
+           max-interval: 300000ms
+           multiplier: 2
+         exchange: ly.item.exchange
+       publisher-confirms: true #生产者确认
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:10086/eureka
+  instance:
+    lease-renewal-interval-in-seconds: 5 # 每隔5秒发送一次心跳
+    lease-expiration-duration-in-seconds: 10 # 10秒不发送就过期
+    prefer-ip-address: true
+    ip-address: 127.0.0.1
+    instance-id: ${spring.application.name}:${server.port}
